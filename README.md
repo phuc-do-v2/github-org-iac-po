@@ -6,6 +6,8 @@ The provider documentation was checked on **2026-09-30**. The configuration pins
 
 The Vietnamese [edge-case test plan](docs/edge-case-test-plan-vi.md) defines a two-team Infra/Argo CD scenario and the evidence required for a final recommendation.
 
+The [future rollout workbook](outputs/github-org-iac-future-rollout/github-org-iac-future-rollout-vi.xlsx) gives team leads a compact view of the recommendation, IaC versus manual UI trade-offs, rollout phases, decision tests, and production controls.
+
 ## Files
 
 | File | Purpose |
