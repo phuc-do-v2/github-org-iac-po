@@ -1,0 +1,29 @@
+# Terraform state, local configuration, plans and crash logs.
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+*.tfplan
+*.plan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Credentials and private, unredacted evidence.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+docs/evidence/local/
+
+# Local validation tooling; commit .terraform.lock.hcl.
+.tools/
