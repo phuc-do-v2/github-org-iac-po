@@ -4,6 +4,8 @@ Manage **teams and direct team memberships in a sandbox organization** using Ter
 
 The provider documentation was checked on **2026-09-30**. The configuration pins `integrations/github` **6.13.0**, with checksums in `.terraform.lock.hcl`. See [verified provider behavior and permissions](docs/provider-research.md) and [results / live test checklist](docs/team-poc-results.md).
 
+The Vietnamese [edge-case test plan](docs/edge-case-test-plan-vi.md) defines a two-team Infra/Argo CD scenario and the evidence required for a final recommendation.
+
 ## Files
 
 | File | Purpose |
