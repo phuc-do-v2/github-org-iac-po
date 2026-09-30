@@ -80,6 +80,8 @@ terraform output
 terraform plan -detailed-exitcode
 ```
 
+Authentication is required again during `apply`, even when using a saved plan. Git Credential Manager credentials are not consumed directly by this provider: ensure `GITHUB_TOKEN` is set in the same terminal before both `plan` and `apply`. A missing token can make the provider fall back to anonymous access and return HTTP 401. Do not persist the token in `terraform.tfvars`, Git configuration, or repository files.
+
 The final plan should exit `0` with no changes (`2` means changes; `1` means an error). Verify the team and direct membership in GitHub UI using the output URL. Keep plans fresh: the org membership guard runs during planning, and a saved plan cannot protect against a user being removed from the org afterward. Do not use `-target` or `-refresh=false` to bypass normal dependencies/checks.
 
 ## Task B lifecycle exercise
