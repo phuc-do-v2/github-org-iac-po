@@ -1,6 +1,12 @@
 # Task B results: teams and team membership
 
-Date: **2026-09-30**. Scope: local scaffold, validation, and the first live create/convergence flow in sandbox organization `xbrain-org-poc`. The remaining update, removal, drift, import, nesting, and cleanup flows are not yet completed.
+Date: **2026-09-30**. Scope: local scaffold, validation, and the first live create/convergence flow in sandbox organization `xbrain-org-poc`. The remaining required update, team membership role/removal, team deletion, and verification flows are not yet completed. Drift, import, and nesting are extensions rather than proof that the original task is complete.
+
+## Scope boundary
+
+This is the result record for **Task B – Org Teams**. It manages teams and direct team memberships only. Organization invitation, organization-role update, and organization-member removal belong to **Task A – Org Members (Hoàng)** and are not implemented here. `data.github_membership.existing` is a read-only prerequisite check; it is not an organization-member lifecycle resource.
+
+See the concise Vietnamese [scope and result report](task-b-scope-report-vi.md) for the original ownership split, verified evidence, overclaim corrections, and remaining completion steps.
 
 ## Local evidence
 
@@ -60,4 +66,4 @@ Plan-time membership checks have a race with later org changes; regenerate plans
 
 Authentication observation: applying a saved plan still requires provider credentials. An initial apply attempt without `GITHUB_TOKEN` failed with HTTP 401 before creating resources. Git Credential Manager is not an automatic authentication source for the Terraform provider; injecting its credential into process-local `GITHUB_TOKEN` allowed the approved plan to apply. No token was written to configuration, state documentation, or Git.
 
-Production recommendation: finish the sandbox evidence first, then evaluate GitHub App credentials, protected shared state, review controls, and an explicit ownership boundary with the separate repository IaC effort.
+Conclusion for the original task: current live evidence proves create plus convergence only. Do not describe Task B as a complete team lifecycle PoC until live update, ordinary-member add/role/remove, team deletion, state verification, and GitHub verification are recorded. Production controls remain future recommendations outside this PoC result.

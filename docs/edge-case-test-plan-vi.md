@@ -1,8 +1,10 @@
-# Kế hoạch edge case cho PoC GitHub Organization IaC
+# Kế hoạch kiểm thử mở rộng cho Task 2 – Org Teams
 
 ## Mục tiêu và mô hình thử nghiệm
 
-Mục tiêu là trả lời bằng bằng chứng: Terraform có thể thay thế phần lớn thao tác GitHub Organization thủ công cho team và direct team membership hay không, đồng thời thất bại an toàn ở các trường hợp biên.
+Mục tiêu là kiểm tra thêm behavior và trường hợp biên sau khi hoàn tất lifecycle tối thiểu của Task 2. Các case chưa chạy là kế hoạch, không phải bằng chứng rằng Terraform đã thay thế thao tác UI hoặc đã sẵn sàng cho production.
+
+Phạm vi vẫn chỉ gồm team và direct team membership. Invite, đổi organization role và remove organization member thuộc Task 1 của Hoàng.
 
 Mô hình sandbox:
 
