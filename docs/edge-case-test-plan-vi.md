@@ -38,11 +38,11 @@ File local `edge-case.tfvars` mô tả trạng thái đích. Nó giữ key Terra
 | AUTH-02 | Owner nhưng token thiếu scope mời member | Dùng credential có `repo, workflow, gist` để mời `phuc776` | GitHub trả 403; chứng minh role owner không thay thế token scope. Đã quan sát thực tế. |
 | MEMBER-01 | User chưa thuộc organization | Plan với `phuc776` trong team | **Đạt thực tế:** read-only `github_membership` trả 404 và toàn bộ plan exit `1`; không lưu plan, tạo team/membership hoặc tự gửi invitation. Trước khi bị chặn, preview chỉ ra root update tại chỗ (giữ ID `19806617`) và một child create, không có destroy. |
 | MEMBER-02 | Invitation đang pending | Owner mời `phuc776`, user chưa accept, chạy plan | Lookup thành công nhưng postcondition `state == active` chặn plan; không tạo team membership. |
-| MEMBER-03 | Invitation đã accept | `phuc776` accept, tạo plan mới | Plan cho phép direct membership; apply xong API trả `active/member`; plan sau apply không đổi. |
+| MEMBER-03 | Invitation đã accept | `phuc776` accept, tạo plan mới | **Đạt live:** add plan 1/0/0; API trả organization `active/member` và team `active/member`; plan sau apply exit `0`. |
 | ROLE-01 | Org owner được cấu hình `member` | Đổi `phuc-do-v2` thành `member` trong team | Precondition chặn plan vì GitHub luôn báo owner là team maintainer. Mock test đã đạt. |
-| ROLE-02 | Đổi role user thường | `phuc776`: `member` → `maintainer` → `member` | Mỗi bước là update tại chỗ; org role vẫn là member; plan sau apply không đổi. |
-| TEAM-01 | Đổi team name/slug | `poc-devops` → `poc-infra-maintainers`, giữ key `devops` | Update tại chỗ, numeric team ID `19806617` được giữ; slug thay đổi; membership không bị recreate. |
-| TEAM-02 | Update thuộc tính | Đổi description và notification setting | Update tại chỗ, plan phát hiện đúng field, hội tụ sau apply. |
+| ROLE-02 | Đổi role user thường | `phuc776`: `member` → `maintainer` | **Đạt live:** update tại chỗ; org role vẫn là member; plan sau apply exit `0`. |
+| TEAM-01 | Đổi team name/slug | `poc-devops` → `poc-infra-maintainers`, giữ key `devops` | **Đạt live:** update tại chỗ, numeric team ID `19806617` được giữ; slug thay đổi; membership không bị recreate. |
+| TEAM-02 | Update thuộc tính | Đổi description và notification setting | **Đạt live:** plan 0/1/0, API/state khớp và plan sau apply exit `0`. |
 | NEST-01 | Tạo parent/child hợp lệ | Tạo `argocd` với `parent_key = devops`, cả hai `closed` | Parent được refresh/update trước, child nhận đúng parent ID; không có cycle. |
 | NEST-02 | Child hoặc parent là `secret` | Đổi privacy một phía thành `secret` | Variable validation chặn trước API. Mock test đã đạt. |
 | NEST-03 | Membership kế thừa | Chỉ cho `phuc776` vào child, đọc quyền/membership ở parent | Ghi rõ direct và inherited membership; Terraform chỉ sở hữu quan hệ direct đã khai báo. |
@@ -50,7 +50,7 @@ File local `edge-case.tfvars` mô tả trạng thái đích. Nó giữ key Terra
 | DRIFT-01 | Sửa team thủ công | Đổi description của team trên UI | Plan phát hiện và đề xuất khôi phục giá trị IaC; apply hội tụ. |
 | DRIFT-02 | Sửa membership thủ công | Đổi/xóa direct role của `phuc776` trên UI | Plan đề xuất khôi phục đúng relationship/role; org membership không đổi. |
 | ADDITIVE-01 | Thêm user ngoài cấu hình | Thêm một user khác thủ công vào team | Plan không xóa user đó vì `github_team_membership` là additive; ghi nhận đây là giới hạn quản trị. |
-| REMOVE-01 | Xóa direct team membership | Bỏ `phuc776` khỏi map `members` | Plan chỉ destroy relationship; user vẫn active trong organization. |
+| REMOVE-01 | Xóa direct team membership | Bỏ `phuc776` khỏi map `members` | **Đạt live:** plan/apply chỉ destroy relationship; team membership trả 404; user vẫn `active/member` trong organization. |
 | REMOVE-02 | Xóa child team | Bỏ key `argocd` | Plan xóa memberships do state quản lý rồi child; root còn nguyên. |
 | DELETE-01 | Xóa parent có child | Chỉ lập plan, kiểm kê mọi child trước apply | Không apply nếu có unmanaged child; GitHub có thể cascade xóa ngoài những gì plan hiển thị. |
 | IMPORT-01 | Import team có sẵn | Import bằng numeric ID vào cấu hình khớp | Plan chỉ import, không update/replace; plan kế tiếp không đổi. |
@@ -75,4 +75,4 @@ File local `edge-case.tfvars` mô tả trạng thái đích. Nó giữ key Terra
 - **Go có điều kiện**: lifecycle cơ bản đạt nhưng cần GitHub App/PAT đúng quyền, remote state có locking, PR review và runbook cho nested-team deletion, inherited membership, IdP sync.
 - **No-go**: provider tạo diff lặp lại không thể xử lý, role/direct membership không ổn định, import gây replace, hoặc thao tác team có side effect ngoài state không thể kiểm soát bằng review.
 
-Kết luận hiện tại là **Go có điều kiện cho create và convergence**. Chưa đủ dữ liệu để kết luận toàn bộ lifecycle cho đến khi `phuc776` active và các case còn lại được ghi bằng chứng.
+Kết luận cho yêu cầu Task 2 gốc là **đạt trong sandbox**: create/update/delete team và add/change-role/remove direct membership đều có live evidence và plan hội tụ. Ma trận này còn các phần mở rộng chưa chạy như nested team, drift, import, state locking và concurrency; vì vậy chưa kết luận production readiness.

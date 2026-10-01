@@ -2,11 +2,13 @@
 
 Manage **teams and direct team memberships in a sandbox organization** using Terraform. Organization invitations, organization roles/removal, repositories, and team-to-repository permissions are outside this implementation. The supplied handoff is preserved; the request to implement Task B only takes precedence over its members-first sequence.
 
-The provider documentation was checked on **2026-09-30**. The configuration pins `integrations/github` **6.13.0**, with checksums in `.terraform.lock.hcl`. See [verified provider behavior and permissions](docs/provider-research.md) and [results / live test checklist](docs/team-poc-results.md).
+The provider documentation was checked again on **2026-10-01**. The configuration pins `integrations/github` **6.13.0**, with checksums in `.terraform.lock.hcl`. See [verified provider behavior and permissions](docs/provider-research.md) and [results / live test checklist](docs/team-poc-results.md).
 
 The Vietnamese [Task B scope report](docs/task-b-scope-report-vi.md) separates verified live evidence, remaining work, Task A dependencies, and extensions. The [edge-case test plan](docs/edge-case-test-plan-vi.md) is optional follow-up work after the original Task B lifecycle is complete.
 
-The [team-lead workbook](outputs/github-org-iac-future-rollout/github-org-iac-future-rollout-vi.xlsx) gives a compact view of Task B scope, verified evidence, IaC versus manual UI trade-offs, and the work still required. It does not claim that the full lifecycle or production rollout has been proven.
+The [Jira live evidence](docs/jira-task-b-live-evidence-vi.md) records the completed create/update/delete and direct-membership add/role/remove flows, including final cleanup verification.
+
+The [team-lead workbook](outputs/github-org-iac-future-rollout/github-org-iac-future-rollout-vi.xlsx) gives a compact view of Task B scope, verified evidence, IaC versus manual UI trade-offs, a provider/Terraform glossary, and a staged path from PoC to later adoption. Production rollout has not been proven.
 
 ## Files
 
